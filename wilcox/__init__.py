@@ -1,1 +1,1 @@
-from wilcox.shapes import Circle, Ellipse, Parabola
+from wilcox.shapes import Circle, Ellipse, Parabola, Hyperbola

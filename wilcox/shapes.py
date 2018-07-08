@@ -97,31 +97,11 @@ class Parabola(Shape):
     def locus(self, x, y):
         return self.distance(self.focus, (x,y)) == abs(y-self.directrix)
 
-# def parabola(focus=(0,0), directrix=0, x_center_to_edge=x_distance, y_center_to_edge=y_distance):
-#     length_x = 2*x_center_to_edge + 1
-#     length_y = 2*y_center_to_edge + 1
-#     graph = np.zeros([length_y, length_x])
-#     for y in tqdm(range(-y_center_to_edge, y_center_to_edge+1)):
-#         for x in range(-x_center_to_edge, x_center_to_edge+1):
-#             if distance(focus, (x,y)) == abs(y-directrix):
-#                 graph[y+y_center_to_edge][x+x_center_to_edge] = 1
-#     draw(graph)
+class Hyperbola(Shape):
+    def __init__(self, focus1=(-1,0), focus2=(1,0), major_axis=2):
+        self.foci = (focus1, focus2)
+        self.major_axis = major_axis
+        super().__init__()
 
-# parabola((0,0), 0)
-#
-# def hyperbola(focus1=(-1,0), focus2=(1,0), total_distance=2, x_center_to_edge=x_distance, y_center_to_edge=y_distance):
-#     length_x = 2*x_center_to_edge + 1
-#     length_y = 2*y_center_to_edge + 1
-#     graph = np.zeros([length_y, length_x])
-#     for y in tqdm(range(-y_center_to_edge, y_center_to_edge+1)):
-#         for x in range(-x_center_to_edge, x_center_to_edge+1):
-#             if abs(distance(focus1, (x,y)) - distance(focus2, (x,y))) == total_distance:
-#                 graph[y+y_center_to_edge][x+x_center_to_edge] = 1
-#     draw(graph)
-#
-# # hyperbola(total_distance=20)
-#
-# # circle()
-# # ellipse()
-# # parabola()
-# # hyperbola()
+    def locus(self, x, y):
+        return abs(self.distance(self.foci[0], (x,y)) - self.distance(self.foci[1], (x,y))) == self.major_axis
