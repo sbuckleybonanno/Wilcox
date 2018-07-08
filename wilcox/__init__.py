@@ -1,1 +1,1 @@
-from wilcox.shapes import Circle
+from wilcox.shapes import Circle, Ellipse

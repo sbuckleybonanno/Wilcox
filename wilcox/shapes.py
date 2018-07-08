@@ -80,33 +80,16 @@ class Circle(Shape):
         return self.distance(self.center, (x,y)) == self.radius
 
 class Ellipse(Shape):
-    def __init__(self, focus1=(-1,0), focus2=(1,0), major_axis=4, dimensions=None):
+    def __init__(self, focus1=(-1,0), focus2=(1,0), major_axis=2, dimensions=None):
         self.foci = (focus1, focus2)
         self.major_axis = major_axis
-        self.dimensions = dimensions
-        if not self.dimensions:
-            super().__init__()
+        super().__init__()
 
-    def distance(self, point1, point2):
-        return super().distance(point1, point2)
-#
-#
-#
-#
-#
-# def ellipse(focus1=(-1,0), focus2=(1,0), total_distance=2, x_center_to_edge=x_distance, y_center_to_edge=y_distance):
-#     # total_distance is 2a, in the locus of points definition of a conic section.
-#     length_x = 2*x_center_to_edge + 1
-#     length_y = 2*y_center_to_edge + 1
-#     graph = np.zeros([length_y, length_x])
-#     for y in tqdm(range(-y_center_to_edge, y_center_to_edge+1)):
-#         for x in range(-x_center_to_edge, x_center_to_edge+1):
-#             if distance(focus1, (x,y)) + distance(focus2, (x,y)) == total_distance:
-#                 graph[y+y_center_to_edge][x+x_center_to_edge] = 1
-#     draw(graph)
+    def locus(self, x, y):
+        return self.distance(self.foci[0], (x,y)) + self.distance(self.foci[1], (x,y)) == self.major_axis
 
-# # ellipse((-10,0), (5,20), 2)
-#
+
+
 # def parabola(focus=(0,0), directrix=0, x_center_to_edge=x_distance, y_center_to_edge=y_distance):
 #     length_x = 2*x_center_to_edge + 1
 #     length_y = 2*y_center_to_edge + 1
