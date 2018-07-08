@@ -80,7 +80,7 @@ class Circle(Shape):
         return self.distance(self.center, (x,y)) == self.radius
 
 class Ellipse(Shape):
-    def __init__(self, focus1=(-1,0), focus2=(1,0), major_axis=2, dimensions=None):
+    def __init__(self, focus1=(-1,0), focus2=(1,0), major_axis=2):
         self.foci = (focus1, focus2)
         self.major_axis = major_axis
         super().__init__()
@@ -88,7 +88,14 @@ class Ellipse(Shape):
     def locus(self, x, y):
         return self.distance(self.foci[0], (x,y)) + self.distance(self.foci[1], (x,y)) == self.major_axis
 
+class Parabola(Shape):
+    def __init__(self, focus=(0,0), directrix=0):
+        self.focus = focus
+        self.directrix = directrix
+        super().__init__()
 
+    def locus(self, x, y):
+        return self.distance(self.focus, (x,y)) == abs(y-self.directrix)
 
 # def parabola(focus=(0,0), directrix=0, x_center_to_edge=x_distance, y_center_to_edge=y_distance):
 #     length_x = 2*x_center_to_edge + 1
@@ -99,8 +106,8 @@ class Ellipse(Shape):
 #             if distance(focus, (x,y)) == abs(y-directrix):
 #                 graph[y+y_center_to_edge][x+x_center_to_edge] = 1
 #     draw(graph)
-#
-# # parabola((0,0), 0)
+
+# parabola((0,0), 0)
 #
 # def hyperbola(focus1=(-1,0), focus2=(1,0), total_distance=2, x_center_to_edge=x_distance, y_center_to_edge=y_distance):
 #     length_x = 2*x_center_to_edge + 1
