@@ -4,6 +4,7 @@ from tqdm import tqdm
 import math
 from abc import ABC, abstractmethod
 
+# The parent class to all the shapes of this geometry, with the essential functionality for instantiation and rendering
 class Shape(ABC):
 
     def __init__(self):
@@ -68,6 +69,8 @@ class Shape(ABC):
         ax.yaxis.set_visible(False)
         plt.tight_layout()
         plt.show()
+
+# Conic section definitions
 
 class Circle(Shape):
 

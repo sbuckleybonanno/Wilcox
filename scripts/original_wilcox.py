@@ -1,3 +1,9 @@
+""" The original script written over a single night.
+    The basic mathematical operations necessary to plot
+    in this geometry were first made to work here, and
+    have continued almost unchanged from this original
+    incarnation                                         """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
