@@ -6,49 +6,62 @@ from abc import ABC, abstractmethod
 
 class Shape(ABC):
 
-    def __init__(self, dimensions=(500,500)):
-        self.dimensions=dimensions
-        self.centre_dimensions()
+    def __init__(self):
+        self.dimensions = None
+        self.graph = None
 
     def distance(self, point1, point2):
         distance_x = abs(point1[0]-point2[0])
         distance_y = abs(point1[1]-point2[1])
         return math.gcd(distance_x, distance_y)
 
-        # Make sure that the centre is centred
-    def centre_dimensions(self):
-        self.dimensions = list(self.dimensions)
+    def centre_dimensions(self, dimensions):
+        # Make dimensions mutable
+        dimensions = list(dimensions)
 
-        if self.dimensions[0] % 2 == 0:
-            self.dimensions[0] += 1
-        if self.dimensions[1] % 2 == 0:
-            self.dimensions[1] += 1
+        # So that the centre is centred
+        if dimensions[0] % 2 == 0:
+            dimensions[0] += 1
+        if dimensions[1] % 2 == 0:
+            dimensions[1] += 1
 
-        self.dimensions=tuple(self.dimensions)
+        return tuple(dimensions)
 
     @abstractmethod
-    def definition(self, center, *params):
-        pass
+    # The locus of points definition, i.e. whether a point at (x, y) lies in the set of points that make up the shape.
+    def locus(self, x, y):
+        return False
 
-    def render(self, dimensions=None, definition=lambda x, y: False):
-        if dimensions and dimensions != self.dimensions:
-            self.dimensions = dimensions
+    def render(self, dimensions=None):
+         # dimensions is a tuple (or list, if you must) with the format (width, height).
+        if not dimensions:
+            dimensions = (100, 100) # default value
+        self.dimensions = self.centre_dimensions(dimensions)
 
-        self.centre_dimensions()
+        self.center_to_edge = (int(self.dimensions[0]/2), int(self.dimensions[1]/2)) # Again with the format (x_length, y_length)
 
-        self.center_to_edge = (int(dimensions[0]/2), int(dimensions[1]/2)) # Again with the format (x_length, y_length)
+        # center_to_edge is an object variable because it will be used in draw().
         self.graph = np.zeros([self.dimensions[1], self.dimensions[0]])
 
         for y in tqdm(range(-self.center_to_edge[1], self.center_to_edge[1]+1)):
             for x in range(-self.center_to_edge[0], self.center_to_edge[0]+1):
-                if definition(x, y):
+                if self.locus(x, y):
                     self.graph[y+self.center_to_edge[1]][x+self.center_to_edge[0]] = 1
 
-        # return self.graph
+        return self.graph
 
     def draw(self, dimensions=None):
-        if dimensions and dimensions != self.dimensions:
-            self.render(dimensions)
+        if not dimensions:
+            if not self.graph: # if render() has not been called, since dimensions are only ever set in render()
+                self.render() # render with defaults
+            # else, just draw what has already been rendered.
+        else: # if dimensions were specified
+            if self.centre_dimensions(dimensions) != self.dimensions:
+            # if the new dimensions are different from what has already been rendered,
+            # or if dimensions have not been rendered (i.e self.dimensions == None)
+                self.render(dimensions) # rerender with new dimensions.
+            # else, there has been no change in dimensions, so draw what has already been rendered.
+
         fig, ax = plt.subplots()
         ax.imshow(self.graph, cmap='Blues', origin='lower',extent=(-self.center_to_edge[0]-0.5, self.center_to_edge[0]+0.5, -self.center_to_edge[1]-0.5, self.center_to_edge[1]+0.5))
         ax.xaxis.set_visible(False)
@@ -58,38 +71,24 @@ class Shape(ABC):
 
 class Circle(Shape):
 
-    def __init__(self, radius=1, center=(0,0), dimensions=None): # I should probably get rid of the options argument here, as it does not need to be defined until the shape becomes a rendered shape, which only occurs when render() is called.
+    def __init__(self, radius=1, center=(0,0)): # I should probably get rid of the options argument here, as it does not need to be defined until the shape becomes a rendered shape, which only occurs when render() is called.
         self.radius = radius
         self.center = center
+        super().__init__()
+
+    def locus(self, x, y):
+        return self.distance(self.center, (x,y)) == self.radius
+
+class Ellipse(Shape):
+    def __init__(self, focus1=(-1,0), focus2=(1,0), major_axis=4, dimensions=None):
+        self.foci = (focus1, focus2)
+        self.major_axis = major_axis
         self.dimensions = dimensions
         if not self.dimensions:
             super().__init__()
 
-    # def distance(self, point1, point2):
-    #     return super().distance(point1, point2)
-
-    def render(self, dimensions=None):
-        # dimensions is a tuple (or list, if you must) with the format (width, height).
-        if dimensions and dimensions != self.dimensions:
-            self.dimensions = dimensions
-
-        super().render(self.dimensions, self.definition)
-
-    def definition(self, x, y):
-        return self.distance(self.center, (x,y)) == self.radius
-
-        # return graph
-
-# class Ellipse(Shape):
-#     def __init__(self, focus1=(-1,0), focus2=(1,0), major_axis=4, dimensions=None):
-#         self.foci = (focus1, focus2)
-#         self.major_axis = major_axis
-#         self.dimensions = dimensions
-#         if not self.dimensions:
-#             super().__init__()
-#
-#     def distance(self, point1, point2):
-#         return super().distance(point1, point2)
+    def distance(self, point1, point2):
+        return super().distance(point1, point2)
 #
 #
 #

@@ -6,6 +6,10 @@
 
 ## Usage
 
+### Drawing a shape
+
+### Defining a shape
+
 ## Documentation
 
 ## Licence
