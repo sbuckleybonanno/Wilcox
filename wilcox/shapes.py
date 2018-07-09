@@ -33,7 +33,7 @@ class Shape(ABC):
     def locus(self, x, y):
         return False
 
-    def render(self, dimensions=None):
+    def render(self, dimensions=None): # Todo: change dimensions from a single variable tuple to two variables, x and y.
          # dimensions is a tuple (or list, if you must) with the format (width, height).
         if not dimensions:
             dimensions = (100, 100) # default value
@@ -51,7 +51,7 @@ class Shape(ABC):
 
         return self.graph
 
-    def draw(self, dimensions=None):
+    def draw(self, dimensions=None): # Todo: change dimensions from a single variable tuple to two variables, x and y.
         if not dimensions:
             if not self.graph: # if render() has not been called, since dimensions are only ever set in render()
                 self.render() # render with defaults
