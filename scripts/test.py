@@ -1,14 +1,15 @@
 from wilcox import Circle, Ellipse, Parabola, Hyperbola
-dimensions = (200, 200)
+x, y = 500, 500
 
 circle = Circle()
-circle.draw(dimensions)
+circle.draw()
+circle.draw(x, y)
 
 ellipse = Ellipse()
-ellipse.draw(dimensions)
+ellipse.draw(x, y)
 
 parabola = Parabola()
-parabola.draw()
+parabola.draw(x, y)
 
 hyperbola = Hyperbola()
-hyperbola.draw()
+hyperbola.draw(x, y)

@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 class Shape(ABC):
 
     def __init__(self):
-        self.dimensions = None
+        self.dimensions = None # It would be clearer to break this 2-tuple into an x_length and y_length object variable. However, that requires somewhat substantial work for the same functionality from the user's perspective, and so has been put off.
         self.graph = None
 
     def distance(self, point1, point2):
@@ -33,11 +33,12 @@ class Shape(ABC):
     def locus(self, x, y):
         return False
 
-    def render(self, dimensions=None): # Todo: change dimensions from a single variable tuple to two variables, x and y.
-         # dimensions is a tuple (or list, if you must) with the format (width, height).
-        if not dimensions:
-            dimensions = (100, 100) # default value
-        self.dimensions = self.centre_dimensions(dimensions)
+    def render(self, x_length=None, y_length=None): # In proper usage, either both x_length and y_length are specified, or neither.
+        if x_length == None or y_length == None:
+            self.dimensions = self.centre_dimensions((200, 200)) # default value
+            print("Dimensions not specified; using default: {}".format(self.dimensions))
+        else:
+            self.dimensions = self.centre_dimensions((x_length, y_length))
 
         self.center_to_edge = (int(self.dimensions[0]/2), int(self.dimensions[1]/2)) # Again with the format (x_length, y_length)
 
@@ -51,16 +52,17 @@ class Shape(ABC):
 
         return self.graph
 
-    def draw(self, dimensions=None): # Todo: change dimensions from a single variable tuple to two variables, x and y.
-        if not dimensions:
-            if not self.graph: # if render() has not been called, since dimensions are only ever set in render()
+    def draw(self, x_length=None, y_length=None):
+        if x_length is None or y_length is None:
+            if self.graph is None: # if render() has not been called, since dimensions are only ever set in render()
                 self.render() # render with defaults
             # else, just draw what has already been rendered.
         else: # if dimensions were specified
-            if self.centre_dimensions(dimensions) != self.dimensions:
+            dimensions = self.centre_dimensions((x_length, y_length))
+            if dimensions != self.dimensions:
             # if the new dimensions are different from what has already been rendered,
             # or if dimensions have not been rendered (i.e self.dimensions == None)
-                self.render(dimensions) # rerender with new dimensions.
+                self.render(*dimensions) # rerender with new dimensions.
             # else, there has been no change in dimensions, so draw what has already been rendered.
 
         fig, ax = plt.subplots()
